@@ -1,0 +1,92 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies { classpath 'com.blackducksoftware.integration:common-gradle-plugin:0.0.+' }
+}
+
+configurations {
+    jaxws.extendsFrom api
+}
+
+project.ext.moduleName = 'com.synopsys.integration.coverity-common-api'
+project.ext.javaUseAutoModuleName = 'true'
+
+version = '2019.6.0-SNAPSHOT'
+description = 'A library of generated request/response classes for the Coverity SOAP API, plus manually created response classes for the Coverity REST API.'
+
+
+apply plugin: 'com.blackducksoftware.integration.library'
+
+
+dependencies {
+    jaxws 'com.sun.xml.ws:jaxws-tools:2.1.4'
+
+    // Required for Java 11
+    api 'javax.xml.bind:jaxb-api:2.3.0'
+    api 'javax.xml.ws:jaxws-api:2.3.0'
+    api 'javax.jws:jsr181-api:1.0-MR1'
+    api 'javax.activation:activation:1.1'
+    api 'com.sun.xml.bind:jaxb-impl:2.3.0'
+    api 'com.sun.xml.bind:jaxb-core:2.3.0'
+    api 'com.sun.xml.ws:rt:2.3.0'
+    api 'com.sun.xml.ws:jaxws-rt:2.3.0'
+    api 'com.sun.xml.ws:jaxws-ri:2.3.2'
+    api 'com.sun.xml.xws:xws-security:3.0'
+}
+
+def wspackage = 'com.synopsys.integration.coverity.api.ws'
+def resourcesDir = project.sourceSets.main.resources.srcDirs.first()
+String configurationServiceWsdlPath = "$resourcesDir/configurationService.wsdl"
+String configurationServiceXsdPath = "$resourcesDir/configurationService.xsd"
+String defectServiceWsdlPath = "$resourcesDir/defectService.wsdl"
+String defectServiceXsdPath = "$resourcesDir/defectService.xsd"
+
+task downloadWsdl {
+    String configurationServiceWsdlUrl = "$coverityServerUrl/ws/v9/configurationservice?wsdl"
+    String configurationServiceXsdUrl = "$coverityServerUrl/ws/v9/configurationservice?xsd=1"
+    String defectServiceWsdlUrl = "$coverityServerUrl/ws/v9/defectservice?wsdl"
+    String defectServiceXsdUrl = "$coverityServerUrl/ws/v9/defectservice?wsdl"
+
+    doLast {
+        "curl -o $configurationServiceWsdlPath $configurationServiceWsdlUrl".execute().waitFor()
+        "curl -o $configurationServiceXsdPath $configurationServiceXsdUrl".execute().waitFor()
+        "curl -o $defectServiceWsdlPath $defectServiceWsdlUrl".execute().waitFor()
+        "curl -o $defectServiceXsdPath $defectServiceXsdUrl".execute().waitFor()
+
+        ant.replace(file: file(configurationServiceWsdlPath), token: configurationServiceXsdUrl, value: 'configurationService.xsd')
+        ant.replace(file: file(defectServiceWsdlPath), token: defectServiceXsdUrl, value: 'defectService.xsd')
+    }
+}
+
+task wsimport {
+    def relativeGeneratedPath = 'src/main/generatedJava'
+    ext.destDir = file("${projectDir}/${relativeGeneratedPath}")
+    doLast {
+        ant {
+            sourceSets.main.output.classesDirs.inits()
+            destDir.mkdirs()
+            taskdef(name: 'wsimport',
+                    classname: 'com.sun.tools.ws.ant.WsImport',
+                    classpath: configurations.jaxws.asPath)
+            wsimport(keep: true,
+                    sourcedestdir: relativeGeneratedPath,
+                    package: "${wspackage}.defect",
+                    wsdl: defectServiceWsdlPath) {
+                xjcarg(value: "-XautoNameResolution")
+            }
+            wsimport(keep: true,
+                    sourcedestdir: relativeGeneratedPath,
+                    package: "${wspackage}.configuration",
+                    wsdl: configurationServiceWsdlPath) {
+                xjcarg(value: "-XautoNameResolution")
+            }
+        }
+    }
+}
+
+compileJava {
+    dependsOn wsimport
+    source wsimport.destDir
+}
