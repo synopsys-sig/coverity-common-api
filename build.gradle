@@ -19,6 +19,7 @@ description = 'A library of generated request/response classes for the Coverity 
 
 apply plugin: 'com.blackducksoftware.integration.library'
 
+nexusStaging { packageGroup = 'com.synopsys' }
 
 dependencies {
     jaxws 'com.sun.xml.ws:jaxws-tools:2.1.4'
@@ -36,57 +37,41 @@ dependencies {
     api 'com.sun.xml.xws:xws-security:3.0'
 }
 
-def wspackage = 'com.synopsys.integration.coverity.api.ws'
-def resourcesDir = project.sourceSets.main.resources.srcDirs.first()
-String configurationServiceWsdlPath = "$resourcesDir/configurationService.wsdl"
-String configurationServiceXsdPath = "$resourcesDir/configurationService.xsd"
-String defectServiceWsdlPath = "$resourcesDir/defectService.wsdl"
-String defectServiceXsdPath = "$resourcesDir/defectService.xsd"
-
-task downloadWsdl {
-    String configurationServiceWsdlUrl = "$coverityServerUrl/ws/v9/configurationservice?wsdl"
-    String configurationServiceXsdUrl = "$coverityServerUrl/ws/v9/configurationservice?xsd=1"
-    String defectServiceWsdlUrl = "$coverityServerUrl/ws/v9/defectservice?wsdl"
-    String defectServiceXsdUrl = "$coverityServerUrl/ws/v9/defectservice?wsdl"
-
-    doLast {
-        "curl -o $configurationServiceWsdlPath $configurationServiceWsdlUrl".execute().waitFor()
-        "curl -o $configurationServiceXsdPath $configurationServiceXsdUrl".execute().waitFor()
-        "curl -o $defectServiceWsdlPath $defectServiceWsdlUrl".execute().waitFor()
-        "curl -o $defectServiceXsdPath $defectServiceXsdUrl".execute().waitFor()
-
-        ant.replace(file: file(configurationServiceWsdlPath), token: configurationServiceXsdUrl, value: 'configurationService.xsd')
-        ant.replace(file: file(defectServiceWsdlPath), token: defectServiceXsdUrl, value: 'defectService.xsd')
-    }
-}
-
 task wsimport {
-    def relativeGeneratedPath = 'src/main/generatedJava'
-    ext.destDir = file("${projectDir}/${relativeGeneratedPath}")
+    def generationPath = project.sourceSets.main.java.srcDirs.first()
+    ext.destDir = file(generationPath)
+
     doLast {
-        ant {
-            sourceSets.main.output.classesDirs.inits()
-            destDir.mkdirs()
-            taskdef(name: 'wsimport',
-                    classname: 'com.sun.tools.ws.ant.WsImport',
-                    classpath: configurations.jaxws.asPath)
-            wsimport(keep: true,
-                    sourcedestdir: relativeGeneratedPath,
-                    package: "${wspackage}.defect",
-                    wsdl: defectServiceWsdlPath) {
-                xjcarg(value: "-XautoNameResolution")
+        if (project.hasProperty('coverityServerUrl')) {
+            def wspackage = 'com.synopsys.integration.coverity.api.ws'
+            String configurationServiceWsdlUrl = "$coverityServerUrl/ws/v9/configurationservice?wsdl"
+            String defectServiceWsdlUrl = "$coverityServerUrl/ws/v9/defectservice?wsdl"
+
+            ant {
+                sourceSets.main.output.classesDirs.inits()
+                destDir.mkdirs()
+                taskdef(name: 'wsimport',
+                        classname: 'com.sun.tools.ws.ant.WsImport',
+                        classpath: configurations.jaxws.asPath)
+                wsimport(keep: true,
+                        sourcedestdir: generationPath,
+                        package: "${wspackage}.defect",
+                        wsdl: configurationServiceWsdlUrl) {
+                    xjcarg(value: "-XautoNameResolution")
+                }
+                wsimport(keep: true,
+                        sourcedestdir: generationPath,
+                        package: "${wspackage}.configuration",
+                        wsdl: defectServiceWsdlUrl) {
+                    xjcarg(value: "-XautoNameResolution")
+                }
             }
-            wsimport(keep: true,
-                    sourcedestdir: relativeGeneratedPath,
-                    package: "${wspackage}.configuration",
-                    wsdl: configurationServiceWsdlPath) {
-                xjcarg(value: "-XautoNameResolution")
-            }
+        } else {
+            logger.warn('coverityServerUrl not specified, will not wsimport the request and response classes')
         }
     }
 }
 
 compileJava {
     dependsOn wsimport
-    source wsimport.destDir
 }
