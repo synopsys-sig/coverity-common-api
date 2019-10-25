@@ -55,13 +55,13 @@ task wsimport {
                         classpath: configurations.jaxws.asPath)
                 wsimport(keep: true,
                         sourcedestdir: generationPath,
-                        package: "${wspackage}.defect",
+                        package: "${wspackage}.configuration",
                         wsdl: configurationServiceWsdlUrl) {
                     xjcarg(value: "-XautoNameResolution")
                 }
                 wsimport(keep: true,
                         sourcedestdir: generationPath,
-                        package: "${wspackage}.configuration",
+                        package: "${wspackage}.defect",
                         wsdl: defectServiceWsdlUrl) {
                     xjcarg(value: "-XautoNameResolution")
                 }
