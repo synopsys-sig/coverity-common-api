@@ -13,9 +13,9 @@ configurations {
 project.ext.moduleName = 'com.synopsys.integration.coverity-common-api'
 project.ext.javaUseAutoModuleName = 'true'
 
+group = 'com.synopsys.integration'
 version = '2019.6.0-SNAPSHOT'
 description = 'A library of generated request/response classes for the Coverity SOAP API, plus manually created response classes for the Coverity REST API.'
-
 
 apply plugin: 'com.blackducksoftware.integration.library'
 
