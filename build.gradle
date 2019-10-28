@@ -33,6 +33,11 @@ dependencies {
     api 'javax.xml.ws:jaxws-api:2.3.0'
     api 'javax.jws:jsr181-api:1.0-MR1'
     api 'javax.activation:activation:1.1'
+    api 'com.sun.xml.bind:jaxb-impl:2.3.0'
+    api 'com.sun.xml.bind:jaxb-core:2.3.0'
+    api 'com.sun.xml.ws:rt:2.3.0'
+    api 'com.sun.xml.ws:jaxws-rt:2.3.0'
+    api 'com.sun.xml.ws:jaxws-ri:2.3.2'
 }
 
 task wsimport {
