@@ -6,6 +6,8 @@ buildscript {
     dependencies { classpath 'com.blackducksoftware.integration:common-gradle-plugin:0.0.+' }
 }
 
+plugins { id 'groovy' }
+
 configurations {
     jaxws.extendsFrom api
 }
@@ -16,6 +18,8 @@ project.ext.javaUseAutoModuleName = 'true'
 group = 'com.synopsys.integration'
 version = '2019.6.0-SNAPSHOT'
 description = 'A library of generated request/response classes for the Coverity SOAP API, plus manually created response classes for the Coverity REST API.'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 apply plugin: 'com.blackducksoftware.integration.library'
 
@@ -29,12 +33,6 @@ dependencies {
     api 'javax.xml.ws:jaxws-api:2.3.0'
     api 'javax.jws:jsr181-api:1.0-MR1'
     api 'javax.activation:activation:1.1'
-    api 'com.sun.xml.bind:jaxb-impl:2.3.0'
-    api 'com.sun.xml.bind:jaxb-core:2.3.0'
-    api 'com.sun.xml.ws:rt:2.3.0'
-    api 'com.sun.xml.ws:jaxws-rt:2.3.0'
-    api 'com.sun.xml.ws:jaxws-ri:2.3.2'
-    api 'com.sun.xml.xws:xws-security:3.0'
 }
 
 task wsimport {
