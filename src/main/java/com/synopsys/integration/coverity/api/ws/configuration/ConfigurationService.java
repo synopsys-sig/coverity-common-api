@@ -761,6 +761,32 @@ public interface ConfigurationService {
 
     /**
      * 
+     * @param deleteSourceStores
+     * @param triageStoreId
+     * @param srcTriageStoreIds
+     * @param assignStreamsToTargetStore
+     * @throws CovRemoteServiceException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "mergeTriageStores", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.MergeTriageStores")
+    @ResponseWrapper(localName = "mergeTriageStoresResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.MergeTriageStoresResponse")
+    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/mergeTriageStoresRequest", output = "http://ws.coverity.com/v9/ConfigurationService/mergeTriageStoresResponse", fault = {
+        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/mergeTriageStores/Fault/CovRemoteServiceException")
+    })
+    public void mergeTriageStores(
+        @WebParam(name = "srcTriageStoreIds", targetNamespace = "")
+        List<TriageStoreIdDataObj> srcTriageStoreIds,
+        @WebParam(name = "triageStoreId", targetNamespace = "")
+        TriageStoreIdDataObj triageStoreId,
+        @WebParam(name = "deleteSourceStores", targetNamespace = "")
+        boolean deleteSourceStores,
+        @WebParam(name = "assignStreamsToTargetStore", targetNamespace = "")
+        boolean assignStreamsToTargetStore)
+        throws CovRemoteServiceException_Exception
+    ;
+
+    /**
+     * 
      * @return
      *     returns java.util.List<java.lang.String>
      * @throws CovRemoteServiceException_Exception
@@ -842,32 +868,6 @@ public interface ConfigurationService {
 
     /**
      * 
-     * @param deleteSourceStores
-     * @param triageStoreId
-     * @param srcTriageStoreIds
-     * @param assignStreamsToTargetStore
-     * @throws CovRemoteServiceException_Exception
-     */
-    @WebMethod
-    @RequestWrapper(localName = "mergeTriageStores", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.MergeTriageStores")
-    @ResponseWrapper(localName = "mergeTriageStoresResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.MergeTriageStoresResponse")
-    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/mergeTriageStoresRequest", output = "http://ws.coverity.com/v9/ConfigurationService/mergeTriageStoresResponse", fault = {
-        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/mergeTriageStores/Fault/CovRemoteServiceException")
-    })
-    public void mergeTriageStores(
-        @WebParam(name = "srcTriageStoreIds", targetNamespace = "")
-        List<TriageStoreIdDataObj> srcTriageStoreIds,
-        @WebParam(name = "triageStoreId", targetNamespace = "")
-        TriageStoreIdDataObj triageStoreId,
-        @WebParam(name = "deleteSourceStores", targetNamespace = "")
-        boolean deleteSourceStores,
-        @WebParam(name = "assignStreamsToTargetStore", targetNamespace = "")
-        boolean assignStreamsToTargetStore)
-        throws CovRemoteServiceException_Exception
-    ;
-
-    /**
-     * 
      * @return
      *     returns javax.xml.datatype.XMLGregorianCalendar
      * @throws CovRemoteServiceException_Exception
@@ -894,29 +894,6 @@ public interface ConfigurationService {
     @ResponseWrapper(localName = "getLicenseStateResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetLicenseStateResponse")
     @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getLicenseStateRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getLicenseStateResponse")
     public LicenseStateDataObj getLicenseState();
-
-    /**
-     * 
-     * @param fileName
-     * @param snapshotId
-     * @return
-     *     returns com.synopsys.integration.coverity.api.ws.configuration.OutputFileDataObj
-     * @throws CovRemoteServiceException_Exception
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getOutputFileForSnapshot", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetOutputFileForSnapshot")
-    @ResponseWrapper(localName = "getOutputFileForSnapshotResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetOutputFileForSnapshotResponse")
-    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getOutputFileForSnapshotRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getOutputFileForSnapshotResponse", fault = {
-        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getOutputFileForSnapshot/Fault/CovRemoteServiceException")
-    })
-    public OutputFileDataObj getOutputFileForSnapshot(
-        @WebParam(name = "snapshotId", targetNamespace = "")
-        SnapshotIdDataObj snapshotId,
-        @WebParam(name = "fileName", targetNamespace = "")
-        String fileName)
-        throws CovRemoteServiceException_Exception
-    ;
 
     /**
      * 
@@ -1008,26 +985,6 @@ public interface ConfigurationService {
 
     /**
      * 
-     * @param filterSpec
-     * @return
-     *     returns java.util.List<com.synopsys.integration.coverity.api.ws.configuration.ProjectDataObj>
-     * @throws CovRemoteServiceException_Exception
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getDeveloperStreamsProjects", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetDeveloperStreamsProjects")
-    @ResponseWrapper(localName = "getDeveloperStreamsProjectsResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetDeveloperStreamsProjectsResponse")
-    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getDeveloperStreamsProjectsRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getDeveloperStreamsProjectsResponse", fault = {
-        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getDeveloperStreamsProjects/Fault/CovRemoteServiceException")
-    })
-    public List<ProjectDataObj> getDeveloperStreamsProjects(
-        @WebParam(name = "filterSpec", targetNamespace = "")
-        ProjectFilterSpecDataObj filterSpec)
-        throws CovRemoteServiceException_Exception
-    ;
-
-    /**
-     * 
      * @return
      *     returns com.synopsys.integration.coverity.api.ws.configuration.LoggingConfigurationDataObj
      * @throws CovRemoteServiceException_Exception
@@ -1040,23 +997,6 @@ public interface ConfigurationService {
         @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getLoggingConfiguration/Fault/CovRemoteServiceException")
     })
     public LoggingConfigurationDataObj getLoggingConfiguration()
-        throws CovRemoteServiceException_Exception
-    ;
-
-    /**
-     * 
-     * @return
-     *     returns com.synopsys.integration.coverity.api.ws.configuration.LicenseDataObj
-     * @throws CovRemoteServiceException_Exception
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getLicenseConfiguration", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetLicenseConfiguration")
-    @ResponseWrapper(localName = "getLicenseConfigurationResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetLicenseConfigurationResponse")
-    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getLicenseConfigurationRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getLicenseConfigurationResponse", fault = {
-        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getLicenseConfiguration/Fault/CovRemoteServiceException")
-    })
-    public LicenseDataObj getLicenseConfiguration()
         throws CovRemoteServiceException_Exception
     ;
 
@@ -1164,6 +1104,43 @@ public interface ConfigurationService {
 
     /**
      * 
+     * @param filterSpec
+     * @return
+     *     returns java.util.List<com.synopsys.integration.coverity.api.ws.configuration.ProjectDataObj>
+     * @throws CovRemoteServiceException_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getDeveloperStreamsProjects", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetDeveloperStreamsProjects")
+    @ResponseWrapper(localName = "getDeveloperStreamsProjectsResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetDeveloperStreamsProjectsResponse")
+    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getDeveloperStreamsProjectsRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getDeveloperStreamsProjectsResponse", fault = {
+        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getDeveloperStreamsProjects/Fault/CovRemoteServiceException")
+    })
+    public List<ProjectDataObj> getDeveloperStreamsProjects(
+        @WebParam(name = "filterSpec", targetNamespace = "")
+        ProjectFilterSpecDataObj filterSpec)
+        throws CovRemoteServiceException_Exception
+    ;
+
+    /**
+     * 
+     * @return
+     *     returns com.synopsys.integration.coverity.api.ws.configuration.LicenseDataObj
+     * @throws CovRemoteServiceException_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getLicenseConfiguration", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetLicenseConfiguration")
+    @ResponseWrapper(localName = "getLicenseConfigurationResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetLicenseConfigurationResponse")
+    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getLicenseConfigurationRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getLicenseConfigurationResponse", fault = {
+        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getLicenseConfiguration/Fault/CovRemoteServiceException")
+    })
+    public LicenseDataObj getLicenseConfiguration()
+        throws CovRemoteServiceException_Exception
+    ;
+
+    /**
+     * 
      * @return
      *     returns java.lang.String
      * @throws CovRemoteServiceException_Exception
@@ -1215,6 +1192,29 @@ public interface ConfigurationService {
 
     /**
      * 
+     * @param fileName
+     * @param snapshotId
+     * @return
+     *     returns com.synopsys.integration.coverity.api.ws.configuration.OutputFileDataObj
+     * @throws CovRemoteServiceException_Exception
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getOutputFileForSnapshot", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetOutputFileForSnapshot")
+    @ResponseWrapper(localName = "getOutputFileForSnapshotResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetOutputFileForSnapshotResponse")
+    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getOutputFileForSnapshotRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getOutputFileForSnapshotResponse", fault = {
+        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getOutputFileForSnapshot/Fault/CovRemoteServiceException")
+    })
+    public OutputFileDataObj getOutputFileForSnapshot(
+        @WebParam(name = "snapshotId", targetNamespace = "")
+        SnapshotIdDataObj snapshotId,
+        @WebParam(name = "fileName", targetNamespace = "")
+        String fileName)
+        throws CovRemoteServiceException_Exception
+    ;
+
+    /**
+     * 
      * @return
      *     returns java.util.List<java.lang.String>
      * @throws CovRemoteServiceException_Exception
@@ -1227,26 +1227,6 @@ public interface ConfigurationService {
         @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getCheckerNames/Fault/CovRemoteServiceException")
     })
     public List<String> getCheckerNames()
-        throws CovRemoteServiceException_Exception
-    ;
-
-    /**
-     * 
-     * @param attributeDefinitionId
-     * @return
-     *     returns com.synopsys.integration.coverity.api.ws.configuration.AttributeDefinitionDataObj
-     * @throws CovRemoteServiceException_Exception
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAttribute", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetAttribute")
-    @ResponseWrapper(localName = "getAttributeResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetAttributeResponse")
-    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getAttributeRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getAttributeResponse", fault = {
-        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getAttribute/Fault/CovRemoteServiceException")
-    })
-    public AttributeDefinitionDataObj getAttribute(
-        @WebParam(name = "attributeDefinitionId", targetNamespace = "")
-        AttributeDefinitionIdDataObj attributeDefinitionId)
         throws CovRemoteServiceException_Exception
     ;
 
@@ -1269,18 +1249,21 @@ public interface ConfigurationService {
 
     /**
      * 
-     * @param attributeDefinitionSpec
+     * @param attributeDefinitionId
+     * @return
+     *     returns com.synopsys.integration.coverity.api.ws.configuration.AttributeDefinitionDataObj
      * @throws CovRemoteServiceException_Exception
      */
     @WebMethod
-    @RequestWrapper(localName = "createAttribute", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.CreateAttribute")
-    @ResponseWrapper(localName = "createAttributeResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.CreateAttributeResponse")
-    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/createAttributeRequest", output = "http://ws.coverity.com/v9/ConfigurationService/createAttributeResponse", fault = {
-        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/createAttribute/Fault/CovRemoteServiceException")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getAttribute", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetAttribute")
+    @ResponseWrapper(localName = "getAttributeResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.GetAttributeResponse")
+    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/getAttributeRequest", output = "http://ws.coverity.com/v9/ConfigurationService/getAttributeResponse", fault = {
+        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getAttribute/Fault/CovRemoteServiceException")
     })
-    public void createAttribute(
-        @WebParam(name = "attributeDefinitionSpec", targetNamespace = "")
-        AttributeDefinitionSpecDataObj attributeDefinitionSpec)
+    public AttributeDefinitionDataObj getAttribute(
+        @WebParam(name = "attributeDefinitionId", targetNamespace = "")
+        AttributeDefinitionIdDataObj attributeDefinitionId)
         throws CovRemoteServiceException_Exception
     ;
 
@@ -1315,6 +1298,23 @@ public interface ConfigurationService {
         @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/getCategoryNames/Fault/CovRemoteServiceException")
     })
     public List<LocalizedValueDataObj> getCategoryNames()
+        throws CovRemoteServiceException_Exception
+    ;
+
+    /**
+     * 
+     * @param attributeDefinitionSpec
+     * @throws CovRemoteServiceException_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "createAttribute", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.CreateAttribute")
+    @ResponseWrapper(localName = "createAttributeResponse", targetNamespace = "http://ws.coverity.com/v9", className = "com.synopsys.integration.coverity.api.ws.configuration.CreateAttributeResponse")
+    @Action(input = "http://ws.coverity.com/v9/ConfigurationService/createAttributeRequest", output = "http://ws.coverity.com/v9/ConfigurationService/createAttributeResponse", fault = {
+        @FaultAction(className = CovRemoteServiceException_Exception.class, value = "http://ws.coverity.com/v9/ConfigurationService/createAttribute/Fault/CovRemoteServiceException")
+    })
+    public void createAttribute(
+        @WebParam(name = "attributeDefinitionSpec", targetNamespace = "")
+        AttributeDefinitionSpecDataObj attributeDefinitionSpec)
         throws CovRemoteServiceException_Exception
     ;
 

@@ -26,18 +26,11 @@ apply plugin: 'com.blackducksoftware.integration.library'
 nexusStaging { packageGroup = 'com.synopsys' }
 
 dependencies {
-    jaxws 'com.sun.xml.ws:jaxws-tools:2.1.4'
-
-    // Required for Java 11
-    api 'javax.xml.bind:jaxb-api:2.3.0'
-    api 'javax.xml.ws:jaxws-api:2.3.0'
-    api 'javax.jws:jsr181-api:1.0-MR1'
-    api 'javax.activation:activation:1.1'
-    api 'com.sun.xml.bind:jaxb-impl:2.3.0'
-    api 'com.sun.xml.bind:jaxb-core:2.3.0'
-    api 'com.sun.xml.ws:rt:2.3.0'
-    api 'com.sun.xml.ws:jaxws-rt:2.3.0'
+    // Dependencies required to replace the JAX WS classes removed from the JDK in version 11
+    api 'com.sun.xml.ws:rt:2.3.2'
     api 'com.sun.xml.ws:jaxws-ri:2.3.2'
+    api 'com.sun.xml.ws:jaxws-rt:2.3.2'
+    api 'com.sun.org.apache.xml.internal:resolver:20050927'
 }
 
 task wsimport {
