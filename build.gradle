@@ -23,7 +23,10 @@ targetCompatibility = JavaVersion.VERSION_11
 
 apply plugin: 'com.synopsys.integration.library'
 
-nexusStaging { packageGroup = 'com.synopsys' }
+nexusStaging {
+    packageGroup = 'com.synopsys'
+    stagingProfileId = '4af8bea8300633'
+}
 
 dependencies {
     // Dependencies required to replace the JAX WS classes removed from the JDK in version 11
