@@ -16,7 +16,7 @@ project.ext.moduleName = 'com.synopsys.integration.coverity-common-api'
 project.ext.javaUseAutoModuleName = 'true'
 
 group = 'com.synopsys.integration'
-version = '2019.6.1'
+version = '2019.6.1-SNAPSHOT'
 description = 'A library of generated request/response classes for the Coverity SOAP API, plus manually created response classes for the Coverity REST API.'
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
