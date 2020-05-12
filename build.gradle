@@ -1,9 +1,6 @@
 buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies { classpath 'com.synopsys.integration:common-gradle-plugin:1.1.1' }
+    apply from: 'https://raw.githubusercontent.com/blackducksoftware/integration-resources/master/gradle_common/buildscript-repositories.gradle', to: buildscript
+    apply from: 'https://raw.githubusercontent.com/blackducksoftware/integration-resources/master/gradle_common/buildscript-dependencies.gradle', to: buildscript
 }
 
 plugins { id 'groovy' }
@@ -15,18 +12,12 @@ configurations {
 project.ext.moduleName = 'com.synopsys.integration.coverity-common-api'
 project.ext.javaUseAutoModuleName = 'true'
 
-group = 'com.synopsys.integration'
 version = '2019.6.1-SNAPSHOT'
 description = 'A library of generated request/response classes for the Coverity SOAP API, plus manually created response classes for the Coverity REST API.'
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 apply plugin: 'com.synopsys.integration.library'
-
-nexusStaging {
-    packageGroup = 'com.synopsys'
-    stagingProfileId = '4af8bea8300633'
-}
 
 dependencies {
     // Dependencies required to replace the JAX WS classes removed from the JDK in version 11
